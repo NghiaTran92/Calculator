@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="myPrimaryColor">#E84E43</color>
+    <color name="myPrimaryDarkColor">#E84E43</color>
+    <color name="myAccentColor">#E84E43</color>
+    <color name="myDrawerBackground">#F2F2F2</color>
+    <color name="myWindowBackground">#DEDEDE</color>
+    <color name="myTextPrimaryColor">#FFFFFF</color>
+    <color name="myNavigationColor">#000000</color>
+
+
+
+    <!--TextView-->
+    <color name="text_color">#000</color>
+
+    <color name="text_white">#fff</color>
+    <color name="equal_background_color">#259B35</color>
+    <color name="button_pressed_background_color">#40000000</color>
+
+</resources>

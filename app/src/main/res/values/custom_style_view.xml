@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CusTextView" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/text_size</item>
+    </style>
+
+    <style name="CusButton" parent="android:Widget.Button">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/text_size</item>
+    </style>
+
+</resources>

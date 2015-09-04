@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Calculator</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="num_7">7</string>
+    <string name="num_8">8</string>
+    <string name="num_9">9</string>
+    <string name="ce">CE</string>
+    <string name="c">C</string>
+    <string name="num_4">4</string>
+    <string name="num_5">5</string>
+    <string name="num_6">6</string>
+    <string name="sym_add">+</string>
+    <string name="sym_sub">−</string>
+    <string name="num_1">1</string>
+    <string name="num_2">2</string>
+    <string name="num_3">3</string>
+    <string name="sym_mul">×</string>
+    <string name="sym_division">÷</string>
+    <string name="sym_dot">.</string>
+    <string name="num_0">0</string>
+    <string name="sym_open">(</string>
+    <string name="sym_close">)</string>
+    <string name="sym_equal">=</string>
+</resources>

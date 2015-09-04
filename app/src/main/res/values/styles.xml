@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/myPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/myPrimaryDarkColor</item>
+        <item name="colorAccent">@color/myAccentColor</item>
+        <item name="android:textColorPrimary">@color/myTextPrimaryColor</item>
+
+
+        <item name="android:windowBackground">@color/myWindowBackground</item>
+
+        <!--Customize your ui control-->
+        <item name="android:textViewStyle">@style/CusTextView</item>
+
+        <item name="android:buttonStyle">@style/CusButton</item>
+        <item name="buttonStyle">@style/CusButton</item>
+
+
+    </style>
+
+</resources>
