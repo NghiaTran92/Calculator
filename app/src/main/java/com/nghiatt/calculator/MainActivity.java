@@ -1,15 +1,24 @@
 package com.nghiatt.calculator;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nghiatt.calculator.model.HistoryItem;
+import com.nghiatt.calculator.utils.RoundUtils;
+import com.nghiatt.polishnotation.EnumOperater;
+import com.nghiatt.polishnotation.rpn.ReversePolishNotation;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private final String EXTRA_EXPRESSION = "Expression";
+    public static final String EXTRA_NAME_UPDATE_EXPRESSION="UpdateExpression";
 
     private Button mBtnNum0;
     private Button mBtnNum1;
@@ -32,14 +41,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnSymClose;
     private Button mBtnSymDot;
 
+    private TextView mTxtExpression;
     private TextView mTxtResult;
+
+    private ImageView mImgHistory;
+
+    private ReversePolishNotation mReversePolishNotation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mTxtExpression = (TextView) findViewById(R.id.txt_expression);
         mTxtResult = (TextView) findViewById(R.id.txt_result);
+
+        mImgHistory=(ImageView)findViewById(R.id.img_history);
 
         mBtnNum0 = (Button) findViewById(R.id.btn_num_0);
         mBtnNum1 = (Button) findViewById(R.id.btn_num_1);
@@ -64,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnSymClose = (Button) findViewById(R.id.btn_sym_close);
         mBtnSymDot = (Button) findViewById(R.id.btn_sym_dot);
 
+        mImgHistory.setOnClickListener(this);
+
         mBtnNum0.setOnClickListener(this);
         mBtnNum1.setOnClickListener(this);
         mBtnNum2.setOnClickListener(this);
@@ -87,15 +107,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnSymClose.setOnClickListener(this);
         mBtnSymDot.setOnClickListener(this);
 
+        updateExpression(getIntent());
+    }
+
+    protected void updateExpression(Intent intent){
+        Bundle bundle=intent.getExtras();
+        if(bundle!=null) {
+            HistoryItem historyItem = (HistoryItem) bundle.getSerializable(MainActivity.EXTRA_NAME_UPDATE_EXPRESSION);
+            if (historyItem != null) {
+                mTxtExpression.setText(historyItem.expression);
+                mTxtResult.setText(getString(R.string.sym_equal) + historyItem.result);
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        updateExpression(intent);
     }
 
     /*
-    * read more: http://inthecheesefactory.com/blog/fragment-state-saving-best-practices/en
-    * */
+        * read more: http://inthecheesefactory.com/blog/fragment-state-saving-best-practices/en
+        * */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_EXPRESSION, mTxtResult.getText().toString());
+        outState.putString(EXTRA_EXPRESSION, mTxtExpression.getText().toString());
 
     }
 
@@ -104,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
         String expression = savedInstanceState.getString(EXTRA_EXPRESSION);
         if (expression != null) {
-            mTxtResult.setText(expression);
+            mTxtExpression.setText(expression);
         }
     }
 
@@ -113,25 +151,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         switch (id) {
-            case R.id.btn_equal:
+            case R.id.img_history:
+                Intent i=new Intent(this,HistoryActivity.class);
+                startActivity(i);
+                break;
 
+            case R.id.btn_equal:
+                String expression = mTxtExpression.getText().toString();
+                expression = expression.replace(getString(R.string.sym_mul), EnumOperater.MULTIPLICATION.getValue())
+                                    .replace(getString(R.string.sym_division), EnumOperater.DIVISION.getValue())
+                                    .replace(getString(R.string.sym_sub),EnumOperater.SUBTRACT.getValue())
+                                    .replace(getString(R.string.sym_add), EnumOperater.ADD.getValue());
+                if (mReversePolishNotation == null) {
+                    mReversePolishNotation = new ReversePolishNotation(expression);
+                } else if (!expression.equals(mReversePolishNotation.getExpressionOrigin())) {
+                    mReversePolishNotation = new ReversePolishNotation(expression);
+                }
+                boolean isOk = mReversePolishNotation.convertInfixToPostfix();
+                if (isOk) {
+                    try {
+                        double result = mReversePolishNotation.calculate();
+                        mTxtResult.setText(getString(R.string.sym_equal)+ result);
+                        HistoryItem historyItem=new HistoryItem();
+                        historyItem.date=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSSS").format(new Date());
+                        historyItem.expression=mTxtExpression.getText().toString();
+                        historyItem.result=result+"";
+
+                        MainApplication.historyDatabase.insert(historyItem);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        mTxtResult.setText(R.string.syntax_error);
+                    }
+                } else {
+                    mTxtResult.setText(R.string.syntax_error);
+                }
                 break;
             case R.id.btn_ce:
-                String oldStr = mTxtResult.getText().toString();
+                String oldStr = mTxtExpression.getText().toString();
                 if (oldStr.length() > 0) {
                     oldStr = oldStr.substring(0, oldStr.length() - 1);
-                    mTxtResult.setText(oldStr);
+                    mTxtExpression.setText(oldStr);
                 }
                 break;
             case R.id.btn_c:
-                mTxtResult.setText("");
+                mTxtExpression.setText("");
                 break;
 
             default:
                 if (view instanceof Button) {
                     Button btn = (Button) view;
                     String str = btn.getText().toString();
-                    mTxtResult.setText(mTxtResult.getText() + str);
+                    mTxtExpression.setText(mTxtExpression.getText() + str);
                 }
                 break;
         }
