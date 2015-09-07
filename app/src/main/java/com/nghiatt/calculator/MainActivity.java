@@ -49,14 +49,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ReversePolishNotation mReversePolishNotation;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mTxtExpression = (TextView) findViewById(R.id.txt_expression);
-        mTxtResult = (TextView) findViewById(R.id.txt_result);
 
+        mTxtResult = (TextView) findViewById(R.id.txt_result);
+        mTxtResult.setText(R.string.num_0);
         mImgHistory=(ImageView)findViewById(R.id.img_history);
 
         mBtnNum0 = (Button) findViewById(R.id.btn_num_0);
@@ -146,6 +148,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void addCharacter(View view){
+        if (view instanceof Button) {
+            Button btn = (Button) view;
+            String str = btn.getText().toString();
+            mTxtExpression.setText(mTxtExpression.getText() + str);
+        }
+    }
+
+    String resultRound="";
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -154,28 +166,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.img_history:
                 Intent i=new Intent(this,HistoryActivity.class);
                 startActivity(i);
+                this.overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
                 break;
 
             case R.id.btn_equal:
                 String expression = mTxtExpression.getText().toString();
-                expression = expression.replace(getString(R.string.sym_mul), EnumOperater.MULTIPLICATION.getValue())
-                                    .replace(getString(R.string.sym_division), EnumOperater.DIVISION.getValue())
-                                    .replace(getString(R.string.sym_sub),EnumOperater.SUBTRACT.getValue())
-                                    .replace(getString(R.string.sym_add), EnumOperater.ADD.getValue());
                 if (mReversePolishNotation == null) {
-                    mReversePolishNotation = new ReversePolishNotation(expression);
+                    mReversePolishNotation = new ReversePolishNotation(this,expression);
                 } else if (!expression.equals(mReversePolishNotation.getExpressionOrigin())) {
-                    mReversePolishNotation = new ReversePolishNotation(expression);
+                    mReversePolishNotation = new ReversePolishNotation(this,expression);
                 }
                 boolean isOk = mReversePolishNotation.convertInfixToPostfix();
                 if (isOk) {
                     try {
                         double result = mReversePolishNotation.calculate();
-                        mTxtResult.setText(getString(R.string.sym_equal)+ result);
+                        resultRound=RoundUtils.round(result);
+
+                        mTxtResult.setText(getString(R.string.sym_equal)+" "+ resultRound);
                         HistoryItem historyItem=new HistoryItem();
                         historyItem.date=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSSS").format(new Date());
                         historyItem.expression=mTxtExpression.getText().toString();
-                        historyItem.result=result+"";
+                        historyItem.result=resultRound;
 
                         MainApplication.historyDatabase.insert(historyItem);
 
@@ -188,22 +199,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btn_ce:
+
                 String oldStr = mTxtExpression.getText().toString();
                 if (oldStr.length() > 0) {
                     oldStr = oldStr.substring(0, oldStr.length() - 1);
+                    if("".equals(oldStr)){
+                        mTxtResult.setText(getString(R.string.num_0));
+                    }
                     mTxtExpression.setText(oldStr);
                 }
                 break;
             case R.id.btn_c:
                 mTxtExpression.setText("");
+                mTxtResult.setText(R.string.num_0);
                 break;
 
             default:
-                if (view instanceof Button) {
-                    Button btn = (Button) view;
-                    String str = btn.getText().toString();
-                    mTxtExpression.setText(mTxtExpression.getText() + str);
-                }
+                addCharacter(view);
                 break;
         }
     }

@@ -49,7 +49,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         HistoryItem historyItem=mList.get(position);
         Context context= MainApplication.getApplication();
         holder.textViewExpression.setText(historyItem.expression!=null?historyItem.expression:"");
-        holder.textViewResult.setText(historyItem.result!=null?context.getString(R.string.sym_equal)+historyItem.result:"");
+        holder.textViewResult.setText(historyItem.result!=null?context.getString(R.string.sym_equal)+" "+historyItem.result:"");
     }
 
     @Override

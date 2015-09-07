@@ -20,4 +20,9 @@
 
     </style>
 
+    <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/myPrimaryColor</item>
+        <item name="android:textColor">@color/myTextPrimaryColor</item>
+        <item name="android:textColorPrimary">@color/myTextPrimaryColor</item>
+    </style>
 </resources>

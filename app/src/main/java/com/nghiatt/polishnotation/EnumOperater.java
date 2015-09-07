@@ -23,7 +23,10 @@ public enum EnumOperater {
     /**
      * /
      */
-    DIVISION("/");
+    DIVISION("/"),
+    POSITIVE("t+"),
+    NEGATIVE("t-")
+    ;
     private String value;
     EnumOperater(String value){
         this.value=value;
@@ -42,6 +45,10 @@ public enum EnumOperater {
             case MULTIPLICATION:
             case DIVISION:
                 return 3;
+
+            case POSITIVE:
+            case NEGATIVE:
+                return 4;
 
             default:
                 // None

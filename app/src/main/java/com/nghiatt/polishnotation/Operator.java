@@ -19,6 +19,8 @@ public class Operator extends AbstractElement {
 
     public boolean checkOperator() {
         switch (operater) {
+            case POSITIVE:
+            case NEGATIVE:
             case ADD:
             case SUBTRACT:
             case DIVISION:
@@ -61,7 +63,12 @@ public class Operator extends AbstractElement {
             //case "÷":
                 operater = EnumOperater.DIVISION;
                 break;
-
+            case "t+":
+                operater=EnumOperater.POSITIVE;
+                break;
+            case "t-":
+                operater=EnumOperater.NEGATIVE;
+                break;
             // Unknow
             default:
                 flag = false;

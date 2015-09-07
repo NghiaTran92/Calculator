@@ -7,7 +7,7 @@
     <color name="myWindowBackground">#DEDEDE</color>
     <color name="myTextPrimaryColor">#FFFFFF</color>
     <color name="myNavigationColor">#000000</color>
-
+    <color name="myPrimaryColorAlpha">#50E84E43</color>
 
 
     <!--TextView-->
