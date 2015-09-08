@@ -3,22 +3,30 @@ package com.nghiatt.calculator;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nghiatt.calculator.adapter.CalculatorModeAdapter;
 import com.nghiatt.calculator.model.HistoryItem;
+import com.nghiatt.calculator.model.ModeItem;
 import com.nghiatt.calculator.utils.RoundUtils;
 import com.nghiatt.polishnotation.EnumOperater;
 import com.nghiatt.polishnotation.rpn.ReversePolishNotation;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private final String EXTRA_EXPRESSION = "Expression";
-    public static final String EXTRA_NAME_UPDATE_EXPRESSION="UpdateExpression";
+    public static final String EXTRA_NAME_UPDATE_EXPRESSION = "UpdateExpression";
 
     private Button mBtnNum0;
     private Button mBtnNum1;
@@ -43,11 +51,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView mTxtExpression;
     private TextView mTxtResult;
+    private TextView mTxtTitle;
 
     private ImageView mImgHistory;
 
+    private Toolbar mToolbar;
+    private AppCompatSpinner mSpinnerMode;
+    private CalculatorModeAdapter mModeAdapter;
+
     private ReversePolishNotation mReversePolishNotation;
 
+    private int mOldModeSelected = -1;
+    private List<ModeItem> mModeList;
 
 
     @Override
@@ -55,11 +70,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mTxtTitle = (TextView) findViewById(R.id.txt_title);
+        mTxtTitle.setText(R.string.app_name);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         mTxtExpression = (TextView) findViewById(R.id.txt_expression);
 
         mTxtResult = (TextView) findViewById(R.id.txt_result);
         mTxtResult.setText(R.string.num_0);
-        mImgHistory=(ImageView)findViewById(R.id.img_history);
+        mImgHistory = (ImageView) findViewById(R.id.img_history);
 
         mBtnNum0 = (Button) findViewById(R.id.btn_num_0);
         mBtnNum1 = (Button) findViewById(R.id.btn_num_1);
@@ -109,12 +131,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnSymClose.setOnClickListener(this);
         mBtnSymDot.setOnClickListener(this);
 
+        mSpinnerMode = (AppCompatSpinner) findViewById(R.id.spinner_mode);
+        mModeList = getModeList();
+        mModeAdapter = new CalculatorModeAdapter(this, mModeList);
+        mSpinnerMode.setAdapter(mModeAdapter);
+        mSpinnerMode.setOnItemSelectedListener(this);
+
         updateExpression(getIntent());
     }
 
-    protected void updateExpression(Intent intent){
-        Bundle bundle=intent.getExtras();
-        if(bundle!=null) {
+    private List<ModeItem> getModeList() {
+        ArrayList<ModeItem> list = new ArrayList<>();
+        list.add(new ModeItem(getString(R.string.basic)));
+        list.add(new ModeItem(getString(R.string.programming)));
+        return list;
+    }
+
+    protected void updateExpression(Intent intent) {
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
             HistoryItem historyItem = (HistoryItem) bundle.getSerializable(MainActivity.EXTRA_NAME_UPDATE_EXPRESSION);
             if (historyItem != null) {
                 mTxtExpression.setText(historyItem.expression);
@@ -148,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void addCharacter(View view){
+    private void addCharacter(View view) {
         if (view instanceof Button) {
             Button btn = (Button) view;
             String str = btn.getText().toString();
@@ -156,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    String resultRound="";
+    String resultRound = "";
 
     @Override
     public void onClick(View view) {
@@ -164,29 +199,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (id) {
             case R.id.img_history:
-                Intent i=new Intent(this,HistoryActivity.class);
+                Intent i = new Intent(this, HistoryActivity.class);
                 startActivity(i);
-                this.overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                this.overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 break;
 
             case R.id.btn_equal:
                 String expression = mTxtExpression.getText().toString();
                 if (mReversePolishNotation == null) {
-                    mReversePolishNotation = new ReversePolishNotation(this,expression);
+                    mReversePolishNotation = new ReversePolishNotation(this, expression);
                 } else if (!expression.equals(mReversePolishNotation.getExpressionOrigin())) {
-                    mReversePolishNotation = new ReversePolishNotation(this,expression);
+                    mReversePolishNotation = new ReversePolishNotation(this, expression);
                 }
                 boolean isOk = mReversePolishNotation.convertInfixToPostfix();
                 if (isOk) {
                     try {
                         double result = mReversePolishNotation.calculate();
-                        resultRound=RoundUtils.round(result);
+                        resultRound = RoundUtils.round(result);
 
-                        mTxtResult.setText(getString(R.string.sym_equal)+" "+ resultRound);
-                        HistoryItem historyItem=new HistoryItem();
-                        historyItem.date=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSSS").format(new Date());
-                        historyItem.expression=mTxtExpression.getText().toString();
-                        historyItem.result=resultRound;
+                        mTxtResult.setText(getString(R.string.sym_equal) + " " + resultRound);
+                        HistoryItem historyItem = new HistoryItem();
+                        historyItem.date = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSSS").format(new Date());
+                        historyItem.expression = mTxtExpression.getText().toString();
+                        historyItem.result = resultRound;
 
                         MainApplication.historyDatabase.insert(historyItem);
 
@@ -203,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String oldStr = mTxtExpression.getText().toString();
                 if (oldStr.length() > 0) {
                     oldStr = oldStr.substring(0, oldStr.length() - 1);
-                    if("".equals(oldStr)){
+                    if ("".equals(oldStr)) {
                         mTxtResult.setText(getString(R.string.num_0));
                     }
                     mTxtExpression.setText(oldStr);
@@ -218,5 +253,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 addCharacter(view);
                 break;
         }
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        if (mOldModeSelected != position) {
+            mOldModeSelected=position;
+            switch (position) {
+                //1: programming fragment
+                case 1:
+                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+                    break;
+
+                //0: basic fragment
+                default:
+                    Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

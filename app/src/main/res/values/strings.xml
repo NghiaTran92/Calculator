@@ -26,4 +26,7 @@
     <string name="sym_equal">=</string>
     <string name="syntax_error">Syntax error</string>
     <string name="history">History</string>
+
+    <string name="basic">Basic</string>
+    <string name="programming">Programming</string>
 </resources>

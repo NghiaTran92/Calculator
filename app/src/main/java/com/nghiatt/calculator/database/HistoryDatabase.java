@@ -67,5 +67,6 @@ public class HistoryDatabase extends SQLiteOpenHelper {
     public void deleteAll(){
         SQLiteDatabase db=this.getWritableDatabase();
         db.delete(TABLE_NAME,null,null);
+
     }
 }

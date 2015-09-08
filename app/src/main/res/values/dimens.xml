@@ -7,4 +7,8 @@
     <dimen name="text_expression">32sp</dimen>
     <dimen name="text_result">22sp</dimen>
     <dimen name="margin_size">24dp</dimen>
+    <dimen name="text_size_title_toolbar">18sp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
 </resources>
