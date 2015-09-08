@@ -63,6 +63,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="@dimen/margin_size"
                 android:layout_toRightOf="@+id/img_history"
+
                 android:gravity="right"
                 android:singleLine="true"
                 android:textColor="@color/text_white"
