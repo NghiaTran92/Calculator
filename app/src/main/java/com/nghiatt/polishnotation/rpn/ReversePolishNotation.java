@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import com.nghiatt.calculator.R;
 import com.nghiatt.polishnotation.AbstractElement;
 import com.nghiatt.polishnotation.EnumOperater;
+import com.nghiatt.polishnotation.EnumTypeDecimal;
 import com.nghiatt.polishnotation.Operand;
 import com.nghiatt.polishnotation.Operator;
 
@@ -24,14 +25,21 @@ public class ReversePolishNotation {
     private String expressionOrigin = "";
     private String expression;
 
+    private EnumTypeDecimal typeDecimal;
+
     private Context context;
     private Stack<AbstractElement> stackInfixToPostfix;
     private List<AbstractElement> listResultPostfix;
 
     public ReversePolishNotation(Context context, String expression) {
+        this(context,expression,EnumTypeDecimal.DECIMAL);
+    }
+
+    public ReversePolishNotation(Context context, String expression,EnumTypeDecimal typeDecimal){
         this.expressionOrigin = expression;
         this.expression = expression + END_CHARACTER;
         this.context = context;
+        this.typeDecimal=typeDecimal;
         convertToStandard();
         listResultPostfix = new ArrayList<AbstractElement>();
         stackInfixToPostfix = new Stack<AbstractElement>();
@@ -86,12 +94,12 @@ public class ReversePolishNotation {
             // not include END_CHARACTER
             for (int i = 0; i < expression.length() - 1; i++) {
                 char character = expression.charAt(i);
-                if ((character >= '0' && character <= '9') || character == '.') {
+                if ((character >= '0' && character <= '9') || character == '.' || (character>='A' && character<='F')) {
                     temp += character;
 
                     char nextCharacter = expression.charAt(i + 1);
-                    if (!((nextCharacter >= '0' && nextCharacter <= '9') || nextCharacter == '.')) {
-                        Operand operand = new Operand(temp);
+                    if (!((nextCharacter >= '0' && nextCharacter <= '9') || nextCharacter == '.' || (nextCharacter>='A' && nextCharacter<='F'))) {
+                        Operand operand = new Operand(temp,typeDecimal);
                         isNegative = false;
                         if (operand.convert()) {
                             listResultPostfix.add(operand);
