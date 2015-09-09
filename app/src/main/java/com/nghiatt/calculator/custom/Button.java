@@ -23,16 +23,21 @@ public class Button extends android.widget.Button {
         super(context, attrs, defStyleAttr);
         if (!isInEditMode()) {
             TypedArray a = context.obtainStyledAttributes(attrs,
-                    R.styleable.TextView);
-            String font = a.getString(R.styleable.TextView_font);
+                    R.styleable.Button);
+            String font = a.getString(R.styleable.Button_font);
             if (font != null) {
                 if (!font.contains("."))
                     font += ".ttf"; // Add default font's extension.
-                Typeface typeface = Typeface.createFromAsset(context.getAssets(), font);
-                if (typeface != null) {
-                    setTypeface(typeface);
+                try {
+                    Typeface typeface = Typeface.createFromAsset(context.getAssets(), font);
+                    if (typeface != null) {
+                        setTypeface(typeface);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                //Log.i("Viki TextView", "set font: " + font);
+
+
             }
             a.recycle();
         }

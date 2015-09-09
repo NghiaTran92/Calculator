@@ -48,7 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right|bottom"
-
                 android:text=""
                 android:textColor="@color/text_white"
                 android:textSize="@dimen/text_expression" />
