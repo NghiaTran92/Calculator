@@ -10,4 +10,6 @@ public class HistoryItem implements Serializable {
     public String expression;
     public String result;
     public int typeCalcu;
+
+
 }

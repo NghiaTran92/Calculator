@@ -35,7 +35,9 @@
     <string name="hexa">Hex</string>
     <string name="octal">Oct</string>
     <string name="binary">Bin</string>
+    <string name="decimal">Dec</string>
 
     <string name="basic">Basic</string>
     <string name="programming">Programming</string>
+    <string name="delete">Delete</string>
 </resources>

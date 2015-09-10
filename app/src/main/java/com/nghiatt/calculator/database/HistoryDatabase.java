@@ -50,6 +50,11 @@ public class HistoryDatabase extends SQLiteOpenHelper {
         return db.insert(TABLE_NAME,null,contentValues);
     }
 
+    public int delete(HistoryItem historyItem){
+        SQLiteDatabase db=this.getWritableDatabase();
+        return db.delete(TABLE_NAME,"date=?",new String[]{historyItem.date});
+    }
+
     public ArrayList<HistoryItem> getAllHistory(){
         ArrayList<HistoryItem> list=new ArrayList<>();
         SQLiteDatabase db=getReadableDatabase();

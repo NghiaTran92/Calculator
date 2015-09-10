@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.nghiatt.calculator.adapter.HistoryAdapter;
 import com.nghiatt.calculator.model.HistoryItem;
@@ -31,37 +32,67 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        mToolbar=(Toolbar)findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.history);
 
-        mHistoryRecyclerView=(RecyclerView)findViewById(R.id.list_history);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        mHistoryRecyclerView = (RecyclerView) findViewById(R.id.list_history);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mHistoryRecyclerView.setLayoutManager(layoutManager);
         mHistoryRecyclerView.setHasFixedSize(true);
-        mList=new ArrayList<>();
+        mList = new ArrayList<>();
 
-        mAdapter=new HistoryAdapter(mList);
-        mAdapter.setOnItemCLickListener(new HistoryAdapter.OnItemClickListener() {
+        mAdapter = new HistoryAdapter(this, mList);
+        mAdapter.setOnViewClickListener(new HistoryAdapter.OnViewClickListener() {
             @Override
-            public void onItemClick(int position) {
-                Intent i=new Intent(HistoryActivity.this,MainActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable(MainActivity.EXTRA_NAME_UPDATE_EXPRESSION,mList.get(position));
-                i.putExtras(bundle);
-                startActivity(i);
+            public void onViewClick(View view, int position) {
+                int id = view.getId();
+                switch (id) {
+                    case R.id.btn_confirm_delete:
+                        deleteHistoryByIndex(position);
+                        break;
+                    case R.id.container:
+                        Intent i = new Intent(HistoryActivity.this, MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(MainActivity.EXTRA_NAME_UPDATE_EXPRESSION, mList.get(position));
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    default:
+
+                        break;
+                }
             }
         });
+
         mHistoryRecyclerView.setAdapter(mAdapter);
+        mHistoryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         updateList();
     }
 
-    private void updateList(){
+    private void deleteHistoryByIndex(int index) {
+        HistoryItem historyItem = mList.get(index);
+        MainApplication.historyDatabase.delete(historyItem);
+        mList.remove(index);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void updateList() {
         mList.clear();
-        List<HistoryItem> historyItemList= MainApplication.historyDatabase.getAllHistory();
-        if(historyItemList!=null && historyItemList.size()>0){
+        List<HistoryItem> historyItemList = MainApplication.historyDatabase.getAllHistory();
+        if (historyItemList != null && historyItemList.size() > 0) {
             mList.addAll(historyItemList);
         }
         mAdapter.notifyDataSetChanged();
@@ -86,7 +117,7 @@ public class HistoryActivity extends AppCompatActivity {
             MainApplication.historyDatabase.deleteAll();
             updateList();
             return true;
-        }else if(id==android.R.id.home){
+        } else if (id == android.R.id.home) {
 
             this.finish();
             return true;

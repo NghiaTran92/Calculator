@@ -15,6 +15,7 @@ import com.nghiatt.calculator.MainActivity;
 import com.nghiatt.calculator.MainApplication;
 import com.nghiatt.calculator.R;
 import com.nghiatt.calculator.model.HistoryItem;
+import com.nghiatt.calculator.model.StateObj;
 import com.nghiatt.calculator.utils.RoundUtils;
 import com.nghiatt.polishnotation.EnumTypeDecimal;
 import com.nghiatt.polishnotation.rpn.ReversePolishNotation;
@@ -25,7 +26,9 @@ import java.util.Date;
 /**
  * Created by FRAMGIA\tran.thanh.nghia on 09/09/2015.
  */
-public class BasicFragment extends BaseFragment<MainActivity>  implements View.OnClickListener {
+public class BasicFragment extends BaseFragment<MainActivity> implements View.OnClickListener {
+
+    private final String EXTRA_STATE = "SaveStateBasic";
 
     private View mRootView;
 
@@ -60,7 +63,7 @@ public class BasicFragment extends BaseFragment<MainActivity>  implements View.O
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView=inflater.inflate(R.layout.fragment_basic,container,false);
+        mRootView = inflater.inflate(R.layout.fragment_basic, container, false);
 
         mTxtExpression = (TextView) mRootView.findViewById(R.id.txt_expression);
 
@@ -121,25 +124,18 @@ public class BasicFragment extends BaseFragment<MainActivity>  implements View.O
         return mRootView;
     }
 
+
     public void updateExpression(Bundle bundle) {
         if (bundle != null) {
             HistoryItem historyItem = (HistoryItem) bundle.getSerializable(MainActivity.EXTRA_NAME_UPDATE_EXPRESSION);
             if (historyItem != null) {
                 mTxtExpression.setText(historyItem.expression);
-                mTxtResult.setText(getString(R.string.sym_equal)+" "+historyItem.result);
+                mTxtResult.setText(getString(R.string.sym_equal) + " " + historyItem.result);
             }
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     private void addCharacter(View view) {
         if (view instanceof Button) {
@@ -159,7 +155,7 @@ public class BasicFragment extends BaseFragment<MainActivity>  implements View.O
             case R.id.img_history:
                 Intent i = new Intent(this.getContext(), HistoryActivity.class);
                 startActivity(i);
-                this.getMainActivity().overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+                this.getMainActivity().overridePendingTransition(R.anim.left_to_right, R.anim.right_to_right);
                 break;
 
             case R.id.btn_equal:
@@ -180,7 +176,7 @@ public class BasicFragment extends BaseFragment<MainActivity>  implements View.O
                         historyItem.date = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSSS").format(new Date());
                         historyItem.expression = mTxtExpression.getText().toString();
                         historyItem.result = resultRound;
-                        historyItem.typeCalcu= EnumTypeDecimal.DECIMAL.getValue();
+                        historyItem.typeCalcu = EnumTypeDecimal.DECIMAL.getValue();
 
                         MainApplication.historyDatabase.insert(historyItem);
 

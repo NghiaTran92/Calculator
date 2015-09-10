@@ -11,18 +11,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nghiatt.calculator.HistoryActivity;
 import com.nghiatt.calculator.MainActivity;
 import com.nghiatt.calculator.MainApplication;
 import com.nghiatt.calculator.R;
 import com.nghiatt.calculator.adapter.CalculateModeAdapter;
-import com.nghiatt.calculator.adapter.CalculatorModeAdapter;
 import com.nghiatt.calculator.model.HistoryItem;
 import com.nghiatt.calculator.model.ModeCalcuItem;
-import com.nghiatt.calculator.model.ModeItem;
-import com.nghiatt.calculator.utils.RoundUtils;
+import com.nghiatt.calculator.model.StateObj;
 import com.nghiatt.polishnotation.EnumTypeDecimal;
 import com.nghiatt.polishnotation.rpn.ReversePolishNotation;
 
@@ -36,6 +33,8 @@ import java.util.List;
  * Created by FRAMGIA\tran.thanh.nghia on 09/09/2015.
  */
 public class ProgrammingFragment extends BaseFragment<MainActivity> implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    private final String EXTRA_STATE = "SaveStateProgramming";
 
     private static final String BINARY_MODE = "binary";
     private static final String OCTAL_MODE = "octal";
@@ -166,27 +165,19 @@ public class ProgrammingFragment extends BaseFragment<MainActivity> implements V
         if (bundle != null) {
             HistoryItem historyItem = (HistoryItem) bundle.getSerializable(MainActivity.EXTRA_NAME_UPDATE_EXPRESSION);
             if (historyItem != null) {
-                isUserClick=false;
-                for(int i=0;i<mListModeCalcu.size();i++){
-                    if(historyItem.typeCalcu==mListModeCalcu.get(i).getTypeDecimal().getValue()){
+                isUserClick = false;
+                for (int i = 0; i < mListModeCalcu.size(); i++) {
+                    if (historyItem.typeCalcu == mListModeCalcu.get(i).getTypeDecimal().getValue()) {
                         mSpinnerModeCalcu.setSelection(i);
                     }
                 }
                 mTxtExpression.setText(historyItem.expression);
-                mTxtResult.setText(getString(R.string.sym_equal)+" "+historyItem.result);
+                mTxtResult.setText(getString(R.string.sym_equal) + " " + historyItem.result);
             }
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
+   
 
     private List<ModeCalcuItem> getListModeCalcu() {
         ArrayList<ModeCalcuItem> list = new ArrayList<>();
@@ -283,7 +274,7 @@ public class ProgrammingFragment extends BaseFragment<MainActivity> implements V
             case R.id.img_history:
                 Intent i = new Intent(this.getContext(), HistoryActivity.class);
                 startActivity(i);
-                this.getMainActivity().overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+                this.getMainActivity().overridePendingTransition(R.anim.left_to_right, R.anim.right_to_right);
                 break;
 
             case R.id.btn_equal:
@@ -379,9 +370,9 @@ public class ProgrammingFragment extends BaseFragment<MainActivity> implements V
                 mTxtExpression.setText("");
 
             }
-        }else{
-            isUserClick=true;
-            mOldModeSelected=position;
+        } else {
+            isUserClick = true;
+            mOldModeSelected = position;
         }
     }
 

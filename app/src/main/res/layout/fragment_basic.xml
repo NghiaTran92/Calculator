@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:orientation="vertical"
     android:weightSum="10">
@@ -34,26 +35,26 @@
 
             >
 
-            <TextView
+            <com.nghiatt.calculator.custom.TextView
                 android:id="@+id/txt_expression"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right|bottom"
-
+                app:font="@string/opensans_light"
                 android:text=""
                 android:textColor="@color/text_white"
                 android:textSize="@dimen/text_expression" />
         </ScrollView>
 
 
-        <TextView
+        <com.nghiatt.calculator.custom.TextView
             android:id="@+id/txt_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="@dimen/margin_size"
             android:layout_toRightOf="@+id/img_history"
-
+            app:font="@string/opensans_light"
             android:gravity="right"
             android:singleLine="true"
             android:textColor="@color/text_white"
