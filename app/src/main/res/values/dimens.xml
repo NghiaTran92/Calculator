@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="text_size">20sp</dimen>
-    <dimen name="text_result">24sp</dimen>
+    <dimen name="text_expression">32sp</dimen>
+    <dimen name="text_result">22sp</dimen>
     <dimen name="margin_size">24dp</dimen>
 </resources>

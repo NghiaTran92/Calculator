@@ -19,21 +19,41 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="40dp"
-            android:padding="12dp"
             android:background="@drawable/button_selected"
+            android:padding="12dp"
             android:src="@drawable/history" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/txt_result"
+            android:layout_marginRight="@dimen/margin_size"
+            android:layout_marginTop="@dimen/margin_size"
+            android:layout_toRightOf="@+id/img_history"
+
+            >
+
+            <TextView
+                android:id="@+id/txt_expression"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|bottom"
+
+                android:text=""
+                android:textColor="@color/text_white"
+                android:textSize="@dimen/text_expression" />
+        </ScrollView>
+
 
         <TextView
             android:id="@+id/txt_result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_size"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginRight="@dimen/margin_size"
-            android:layout_marginTop="@dimen/margin_size"
             android:layout_toRightOf="@+id/img_history"
-            android:gravity="right|bottom"
-            android:scrollbars="vertical"
-            android:text=""
+            android:gravity="right"
+            android:singleLine="true"
             android:textColor="@color/text_white"
             android:textSize="@dimen/text_result" />
 
@@ -84,7 +104,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/ce" />
+                android:text="@string/ce"
+                android:textColor="@color/myPrimaryColor" />
 
             <Button
                 android:id="@+id/btn_c"
@@ -92,7 +113,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/c" />
+                android:text="@string/c"
+                android:textColor="@color/myPrimaryColor" />
 
         </LinearLayout>
 
@@ -132,7 +154,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_add" />
+                android:text="@string/sym_add"
+                android:textColor="@color/myPrimaryColor"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btn_subtract"
@@ -140,7 +164,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_sub" />
+                android:text="@string/sym_sub"
+                android:textColor="@color/myPrimaryColor"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -180,7 +206,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_mul" />
+                android:text="@string/sym_mul"
+                android:textColor="@color/myPrimaryColor"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btn_division"
@@ -188,7 +216,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_division" />
+                android:text="@string/sym_division"
+                android:textColor="@color/myPrimaryColor"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -220,7 +250,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_open" />
+                android:text="@string/sym_open"
+                android:textColor="@color/myPrimaryColor" />
 
             <Button
                 android:id="@+id/btn_sym_close"
@@ -228,7 +259,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_close" />
+                android:text="@string/sym_close"
+                android:textColor="@color/myPrimaryColor" />
 
             <Button
                 android:id="@+id/btn_equal"
@@ -236,7 +268,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selected"
-                android:text="@string/sym_equal" />
+                android:text="@string/sym_equal"
+                android:textColor="@color/myPrimaryColor"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
