@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right|bottom"
-                app:font="@string/opensans_light"
+                app:fontText="@string/opensans_light"
                 android:text=""
                 android:textColor="@color/text_white"
                 android:textSize="@dimen/text_expression" />
@@ -54,7 +54,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginRight="@dimen/margin_size"
             android:layout_toRightOf="@+id/img_history"
-            app:font="@string/opensans_light"
+            app:fontText="@string/opensans_light"
             android:gravity="right"
             android:singleLine="true"
             android:textColor="@color/text_white"

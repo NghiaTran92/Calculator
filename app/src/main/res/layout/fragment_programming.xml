@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:font="@string/opensans_light"
+            app:fontText="@string/opensans_light"
             android:layout_marginRight="@dimen/margin_size"
             android:layout_toRightOf="@+id/img_history"
             android:textAllCaps="true"

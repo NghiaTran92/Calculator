@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="font" format="string"/>
+    <attr name="fontText" format="string"/>
     <declare-styleable name="TextView">
-        <attr name="font" />
+        <attr name="fontText" />
     </declare-styleable>
     <declare-styleable name="Button">
         <attr name="font" />

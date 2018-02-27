@@ -1,5 +1,6 @@
 package com.nghiatt.calculator.custom;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -15,6 +16,7 @@ import java.io.IOException;
 /**
  * Created by FRAMGIA\tran.thanh.nghia on 08/09/2015.
  */
+@SuppressLint("AppCompatCustomView")
 public class TextView extends android.widget.TextView {
     public TextView(Context context) {
         this(context, null);
@@ -29,7 +31,7 @@ public class TextView extends android.widget.TextView {
         if (!isInEditMode()) {
             TypedArray a = context.obtainStyledAttributes(attrs,
                     R.styleable.TextView);
-            String font = a.getString(R.styleable.TextView_font);
+            String font = a.getString(R.styleable.TextView_fontText);
 
             if (font != null) {
 
