@@ -3,11 +3,20 @@ package com.nghiatt.polishnotation;
 public class Operand extends AbstractElement {
 
     private double value;
+    private EnumTypeDecimal typeDecimal;
 
+    /**
+     * default is DECIMAL
+     * */
     public Operand(String element) {
-        super(element);
-        // TODO Auto-generated constructor stub
+        this(element, EnumTypeDecimal.DECIMAL);
     }
+
+    public Operand(String element,EnumTypeDecimal typeDecimal){
+        super(element);
+        this.typeDecimal=typeDecimal;
+    }
+
 
     public Operand(double value) {
         super(value + "");
@@ -23,8 +32,24 @@ public class Operand extends AbstractElement {
         // TODO Auto-generated method stub
         try {
             // should validation
+            switch (typeDecimal){
+                case BINARY:
+                    value=Integer.parseInt(element,2);
+                    break;
+                case OCTAL:
+                    value=Integer.parseInt(element,8);
+                    break;
+                case HEXA:
+                    value=Integer.parseInt(element,16);
+                    break;
 
-            value = Double.parseDouble(element);
+                // decimal
+                default:
+                    value = Double.parseDouble(element);
+                    break;
+
+            }
+
             return true;
         } catch (NumberFormatException formatException) {
             formatException.printStackTrace();

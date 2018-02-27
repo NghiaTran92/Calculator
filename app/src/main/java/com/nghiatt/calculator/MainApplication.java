@@ -18,6 +18,8 @@ public class MainApplication extends Application {
         historyDatabase=new HistoryDatabase(this);
     }
 
+
+
     public static MainApplication getApplication(){
         return instance;
     }
